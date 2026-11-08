@@ -1,0 +1,8 @@
+{
+  "relevance_floor": 0.5,
+  "mode": "observe",
+  "direct_answer": {
+    "answer_threshold": 0.34,
+    "project_terms": ["Sample Memory Project", "sample", "project", "SMP", "example-project"]
+  }
+}

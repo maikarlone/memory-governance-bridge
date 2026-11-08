@@ -1,0 +1,37 @@
+# secrets and credentials
+.env
+.env.*
+secrets/
+*.token
+*.key
+*.pem
+*.p12
+*.pfx
+credentials*
+*credential*
+
+# real memory data and exports
+/data/
+/snapshots/
+/backups/
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# logs and captures
+logs/
+*.log
+captures/
+*.pcap
+*.har
+
+# local overrides
+config.local.*
+*.local
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

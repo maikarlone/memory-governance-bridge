@@ -1,0 +1,16 @@
+{
+  "demo-desktop-token": {
+    "client": "desktop-agent",
+    "project": "example-project",
+    "team_id": "team-example",
+    "agent_id": "agent-example",
+    "user_id": "user-example"
+  },
+  "demo-ide-token": {
+    "client": "ide-agent",
+    "project": "example-project",
+    "team_id": "team-example",
+    "agent_id": "agent-example",
+    "user_id": "user-example"
+  }
+}

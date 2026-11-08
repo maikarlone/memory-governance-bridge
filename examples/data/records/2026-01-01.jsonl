@@ -1,0 +1,4 @@
+{"id":"m_example_001","content":"The sample project codename is SMP.","type":"episodic","source_message_ids":["msg_example_001"],"teamId":"team-example","userId":"user-example","agentId":"agent-example"}
+{"id":"m_example_002","content":"The sample project core modules are ingest, recall, and audit.","type":"episodic","source_message_ids":["msg_example_002"],"teamId":"team-example","userId":"user-example","agentId":"agent-example"}
+{"id":"m_example_003","content":"The sample project pipeline is draft, review, then recall.","type":"episodic","source_message_ids":["msg_example_003"],"teamId":"team-example","userId":"user-example","agentId":"agent-example"}
+{"id":"m_example_004","content":"The sample project owner is Example Owner.","type":"episodic","source_message_ids":["msg_example_004"],"teamId":"team-example","userId":"user-example","agentId":"agent-example"}
