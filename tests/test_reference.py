@@ -25,6 +25,38 @@ class BridgeTests(unittest.TestCase):
                 self.assertEqual(payload["status"], "disabled")
                 urlopen.assert_not_called()
 
+    def _enabled_bridge(self, payload):
+        with mock.patch.dict("os.environ", {"MEMORY_BRIDGE_ENABLED": "1",
+                                             "MEMORY_CLIENT_TOKEN": "demo"}, clear=True):
+            mod = load(ROOT / "bridge" / "memory_bridge.py", "test_bridge_enabled")
+
+        class Resp:
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+            def read(self): return __import__("json").dumps(payload).encode()
+
+        with mock.patch("urllib.request.urlopen", return_value=Resp()):
+            return mod.recall({"query": "q", "limit": 3})
+
+    def test_no_direct_answer_status(self):
+        result = self._enabled_bridge({
+            "no_direct_answer": True, "low_relevance": False,
+            "items": [{"id": "m1", "content": "adjacent", "score": 0.9}]})
+        payload = __import__("json").loads(result["content"][0]["text"])
+        self.assertEqual(payload["status"], "no_direct_answer")
+        self.assertIsNone(payload["conclusion"])
+        self.assertIsNone(payload["record_id"])
+        self.assertEqual(payload["data"]["items"][0]["content"], "adjacent")
+
+    def test_low_relevance_status(self):
+        result = self._enabled_bridge({
+            "no_direct_answer": False, "low_relevance": True,
+            "items": [{"id": "m1", "content": "weak", "score": 0.1}]})
+        payload = __import__("json").loads(result["content"][0]["text"])
+        self.assertEqual(payload["status"], "low_relevance")
+        self.assertIsNone(payload["conclusion"])
+        self.assertIsNone(payload["record_id"])
+
 
 class AdapterTests(unittest.TestCase):
     def setUp(self):
@@ -35,6 +67,10 @@ class AdapterTests(unittest.TestCase):
             ROOT / "examples" / "clients.example.json",
             ROOT / "examples" / "policy.example.json",
         )
+
+    def test_hashed_client_lookup(self):
+        self.assertEqual(self.adapter.lookup_client("demo-desktop-token")["client"], "desktop-agent")
+        self.assertIsNone(self.adapter.lookup_client("wrong-token"))
 
     def apply(self, query, content, score=0.9):
         items = [{"id": "m_example_001", "content": content, "score": score}]

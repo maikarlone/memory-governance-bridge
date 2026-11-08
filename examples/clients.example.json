@@ -1,12 +1,12 @@
 {
-  "demo-desktop-token": {
+  "13ab8b9e79ed0689c3091473afb8ee05629ec0d2dfd6ded210785b3eb202d8a6": {
     "client": "desktop-agent",
     "project": "example-project",
     "team_id": "team-example",
     "agent_id": "agent-example",
     "user_id": "user-example"
   },
-  "demo-ide-token": {
+  "66edf93999701c66c715a4cdf5aff9d0016f1ef21a26d96ff29da4dd77927815": {
     "client": "ide-agent",
     "project": "example-project",
     "team_id": "team-example",

@@ -51,11 +51,18 @@ def recall(args):
                   "provenance": None, "score": None, "low_relevance": False, "data": payload}
     elif isinstance(items, list):
         top = items[0] if items else {}
-        result = {"status": "ok", "conclusion": top.get("content", ""),
-                  "record_id": top.get("record_id") or top.get("id"),
+        no_direct = bool(payload.get("no_direct_answer") or top.get("no_direct_answer"))
+        low = bool(payload.get("low_relevance") or top.get("low_relevance"))
+        if no_direct:
+            status, conclusion, record_id = "no_direct_answer", None, None
+        elif low:
+            status, conclusion, record_id = "low_relevance", None, None
+        else:
+            status, conclusion, record_id = "ok", top.get("content", ""), top.get("record_id") or top.get("id")
+        result = {"status": status, "conclusion": conclusion,
+                  "record_id": record_id,
                   "provenance": top.get("provenance"), "score": top.get("score"),
-                  "low_relevance": bool(payload.get("low_relevance") or top.get("low_relevance")),
-                  "no_direct_answer": bool(payload.get("no_direct_answer") or top.get("no_direct_answer")),
+                  "low_relevance": low, "no_direct_answer": no_direct,
                   "data": payload}
     else:
         return {"content": [{"type": "text", "text": json.dumps(

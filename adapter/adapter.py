@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Read-only adapter: token-bound identity, result normalization, observe-mode markers."""
 from __future__ import annotations
-import argparse, json, os, re, threading, urllib.request
+import argparse, hashlib, hmac, json, os, re, threading, urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -48,6 +48,13 @@ class Adapter:
             "x-tdai-service-id": os.environ.get("MEMORY_SERVICE_ID", "default"),
             "x-tdai-user-key": os.environ.get("MEMORY_CORE_USER_KEY", ""),
         }
+
+    def lookup_client(self, token):
+        digest = hashlib.sha256((token or "").encode()).hexdigest()
+        for stored_hash, binding in self.clients.items():
+            if hmac.compare_digest(digest, str(stored_hash)):
+                return binding
+        return None
 
     def hydrate(self, items):
         out = []
@@ -143,7 +150,7 @@ def handler(ad):
             if self.path != "/v1/recall":
                 return self.reply(404, {"error": "not found"})
             token = self.headers.get("x-client-token", "")
-            binding = ad.clients.get(token)
+            binding = ad.lookup_client(token)
             if not binding:
                 return self.reply(401, {"error": "invalid client token"})
             try:

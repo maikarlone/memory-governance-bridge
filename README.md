@@ -42,17 +42,23 @@ A typical memory server focuses on storage, embedding, and recall quality. This 
 
 ## Quick start
 
+The adapter talks to a small subset of the upstream **TencentDB-Agent-Memory v3** interface (`POST /v3/atomic/search`). This repository is an independent reference implementation, not a vendored upstream.
+
+### Bash
+
 ```bash
 python -m unittest discover -s tests -v
-```
 
-Run the demo in two terminals:
+export MEMORY_CLIENT_TOKEN="demo-desktop-token"
 
-```bash
 python mock/mock_core.py
 ```
 
+In a second terminal:
+
 ```bash
+export MEMORY_CLIENT_TOKEN="demo-desktop-token"
+
 python adapter/adapter.py --upstream http://127.0.0.1:18080 \
   --data-dir examples/data \
   --clients examples/clients.example.json \
@@ -60,7 +66,7 @@ python adapter/adapter.py --upstream http://127.0.0.1:18080 \
   --port 18081
 ```
 
-Query the adapter:
+Query:
 
 ```bash
 curl -s http://127.0.0.1:18081/v1/recall \
@@ -72,13 +78,53 @@ curl -s http://127.0.0.1:18081/v1/recall \
 Run the MCP bridge (disabled by default):
 
 ```bash
-set MEMORY_BRIDGE_ENABLED=1
-set MEMORY_CLIENT_TOKEN=demo-desktop-token
-set MEMORY_ADAPTER_URL=http://127.0.0.1:18081
+export MEMORY_BRIDGE_ENABLED=1
+export MEMORY_CLIENT_TOKEN="demo-desktop-token"
+export MEMORY_ADAPTER_URL=http://127.0.0.1:18081
 python bridge/memory_bridge.py
 ```
 
+### Windows CMD
+
+```bat
+python -m unittest discover -s tests -v
+
+set "MEMORY_CLIENT_TOKEN=demo-desktop-token"
+python mock\mock_core.py
+```
+
+In a second terminal:
+
+```bat
+set "MEMORY_CLIENT_TOKEN=demo-desktop-token"
+python adapter\adapter.py --upstream http://127.0.0.1:18080 ^
+  --data-dir examples\data ^
+  --clients examples\clients.example.json ^
+  --policy examples\policy.example.json ^
+  --port 18081
+```
+
+Query:
+
+```bat
+curl -s http://127.0.0.1:18081/v1/recall ^
+  -H "content-type: application/json" ^
+  -H "x-client-token: %MEMORY_CLIENT_TOKEN%" ^
+  -d "{\"query\":\"What is the sample project codename?\",\"limit\":3}"
+```
+
+Run the MCP bridge (disabled by default):
+
+```bat
+set "MEMORY_BRIDGE_ENABLED=1"
+set "MEMORY_CLIENT_TOKEN=demo-desktop-token"
+set "MEMORY_ADAPTER_URL=http://127.0.0.1:18081"
+python bridge\memory_bridge.py
+```
+
 With `MEMORY_BRIDGE_ENABLED` unset, the bridge returns `disabled` and makes no network request.
+
+> The example client file stores only SHA-256 hashes of demo tokens. The values above are demonstration credentials, not production secrets.
 
 ## Layout
 
