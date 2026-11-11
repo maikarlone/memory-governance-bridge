@@ -131,7 +131,7 @@ With `MEMORY_BRIDGE_ENABLED` unset, the bridge returns `disabled` and makes no n
 ```text
 adapter/      read-only identity-binding adapter
 bridge/       MCP stdio bridge
-docs/         architecture and write-path design
+docs/         architecture, write-path design, governance limits
 examples/     synthetic clients, policy, L0/L1 data
 mock/         tiny mock memory core
 rules/        generic agent recall rules
@@ -144,6 +144,15 @@ tests/        offline tests
 - No tokens, keys, `.env`, real memory data, logs, or snapshots in this repository.
 - Client credentials are read from environment variables at runtime.
 - Do not enable write paths by default. See `CONTRIBUTING.md` and `SECURITY.md`.
+- Co-governance SOP, retest constraints, and known limits: `docs/GOVERNANCE_LIMITS.md`.
+
+## Governance limits
+
+Co-governance here is the engineering long-memory setting after the SOP is fixed. Each write needs approval at the time of the write, and `update` stays off by default. Generic boundaries, retest constraints, known limits, and open-source exclusions are in [`docs/GOVERNANCE_LIMITS.md`](docs/GOVERNANCE_LIMITS.md).
+
+## 共治限制
+
+共治说明只面向 SOP 固定后的工程化长记忆环境。写入需当场批准，`update` 默认关闭。通用边界、复测约束、已知限制与开源排除见 [`docs/GOVERNANCE_LIMITS.md`](docs/GOVERNANCE_LIMITS.md)。
 
 ## License
 
